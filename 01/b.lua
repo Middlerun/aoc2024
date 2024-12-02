@@ -1,4 +1,4 @@
-require('read')
+require('utils')
 
 local similarityScore = 0
 
@@ -6,12 +6,10 @@ local listA = {}
 
 -- Used to count the number of times any given number appears in list B
 local listBCounts = {}
-function listBCounts:get(n)
-  return self[n] or 0
-end
+setDefault(listBCounts, 0)
 
 function listBCounts:increment(n)
-  self[n] = self:get(n) + 1
+  self[n] = self[n] + 1
 end
 
 for line in readInput() do
@@ -22,7 +20,7 @@ end
 
 for i = 1, #listA do
   local n = listA[i]
-  local count = listBCounts:get(n)
+  local count = listBCounts[n]
   similarityScore = similarityScore + (n * count)
 end
 
