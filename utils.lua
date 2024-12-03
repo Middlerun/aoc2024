@@ -18,14 +18,15 @@ function setDefault(t, d)
 end
 
 -- From https://stackoverflow.com/a/27028488
-local function anythingToString(o)
+-- Modified by me
+local function anythingToString(o, level)
   if type(o) == 'table' then
-    local s = '{ '
+    local s = '{\n'
     for k, v in pairs(o) do
       if type(k) ~= 'number' then k = '"' .. k .. '"' end
-      s = s .. '[' .. k .. '] = ' .. anythingToString(v) .. ', '
+      s = s .. string.rep('  ', level + 1) .. '[' .. k .. '] = ' .. anythingToString(v, level + 1) .. ',\n'
     end
-    return s .. ' } '
+    return s .. string.rep('  ', level) .. '}'
   else
     return tostring(o)
   end
@@ -33,5 +34,5 @@ end
 
 -- It's like print, but cooler
 function dump(o)
-  print(anythingToString(o))
+  print(anythingToString(o, 0))
 end
