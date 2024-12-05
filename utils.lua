@@ -18,6 +18,42 @@ function setDefault(t, d)
   setmetatable(t, defaultValueMetatable)
 end
 
+---@type fun(str: string, delimiter: string): table
+function stringSplit(str, delimiter)
+  local arr = {}
+  local findStart = 1
+
+  if str == '' then
+    return { '' }
+  end
+
+  while findStart <= str:len() do
+    local s, e = str:find(delimiter, findStart)
+    if s and e then
+      table.insert(arr, str:sub(findStart, s - 1))
+      findStart = e + 1
+      if findStart == str:len() + 1 then
+        table.insert(arr, '')
+        break
+      end
+    else
+      table.insert(arr, str:sub(findStart, str:len()))
+      break
+    end
+  end
+
+  return arr
+end
+
+---@type fun(tab: table, fn: function): table
+function map(tab, fn)
+  local newTable = {}
+  for k, v in pairs(tab) do
+    newTable[k] = fn(v)
+  end
+  return newTable
+end
+
 -- From https://stackoverflow.com/a/27028488
 -- Modified by me
 local function anythingToString(o, level)
