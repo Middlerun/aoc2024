@@ -11,6 +11,7 @@ function readInput()
 end
 
 local defaultValueKey = {}
+setmetatable(defaultValueKey, { __tostring = function() return '{default value}' end })
 local defaultValueMetatable = { __index = function(t) return t[defaultValueKey] end }
 function setDefault(t, d)
   t[defaultValueKey] = d
@@ -23,7 +24,11 @@ local function anythingToString(o, level)
   if type(o) == 'table' then
     local s = '{\n'
     for k, v in pairs(o) do
-      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      if type(k) == 'string' then
+        k = '"' .. k .. '"'
+      else
+        k = tostring(k)
+      end
       s = s .. string.rep('  ', level + 1) .. '[' .. k .. '] = ' .. anythingToString(v, level + 1) .. ',\n'
     end
     return s .. string.rep('  ', level) .. '}'
