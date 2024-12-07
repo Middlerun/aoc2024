@@ -9,19 +9,13 @@ local function isEquationValid(testValue, nums)
   local a, b = table.unpack(nums, 1, 2)
 
   -- addition
-  local additionNums = deepClone(nums)
-  table.remove(additionNums, 1)
-  additionNums[1] = a + b
+  local additionNums = spliceArray(nums, 1, 2, { a + b })
 
   -- multiplication
-  local multiplicationNums = deepClone(nums)
-  table.remove(multiplicationNums, 1)
-  multiplicationNums[1] = a * b
+  local multiplicationNums = spliceArray(nums, 1, 2, { a * b })
 
   -- concatenation
-  local concatenationNums = deepClone(nums)
-  table.remove(concatenationNums, 1)
-  concatenationNums[1] = tonumber(a .. b)
+  local concatenationNums = spliceArray(nums, 1, 2, { tonumber(a .. b) })
 
   return
       isEquationValid(testValue, additionNums) or

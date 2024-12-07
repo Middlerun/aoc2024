@@ -99,10 +99,41 @@ function printGrid(grid)
   end
 end
 
+function shallowClone(x)
+  if type(x) == 'table' then
+    return map(x, function(y) return y end)
+  else
+    return x
+  end
+end
+
 function deepClone(x)
   if type(x) == 'table' then
     return map(x, deepClone)
   else
     return x
   end
+end
+
+---@type fun(sourceArr: table, startIndex: number, lengthToRemove: number, elementsToInsert: table): table
+function spliceArray(sourceArr, startIndex, lengthToRemove, elementsToInsert)
+  local indicesAddedCount = #elementsToInsert - lengthToRemove
+  local indicesRemovedCount = lengthToRemove - #elementsToInsert
+  local arr = shallowClone(sourceArr)
+
+  if indicesAddedCount > 0 then
+    for _ = 1, indicesAddedCount do
+      table.insert(arr, startIndex, nil)
+    end
+  elseif indicesRemovedCount > 0 then
+    for _ = 1, indicesRemovedCount do
+      table.remove(arr, startIndex)
+    end
+  end
+
+  for i = 1, #elementsToInsert do
+    arr[startIndex + i - 1] = elementsToInsert[i]
+  end
+
+  return arr
 end
