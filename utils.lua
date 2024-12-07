@@ -27,29 +27,44 @@ function stringSplit(str, delimiter)
     return { '' }
   end
 
-  while findStart <= str:len() do
-    local s, e = str:find(delimiter, findStart)
-    if s and e then
-      table.insert(arr, str:sub(findStart, s - 1))
-      findStart = e + 1
-      if findStart == str:len() + 1 then
-        table.insert(arr, '')
+  if delimiter == '' then
+    for i = 1, str:len() do
+      table.insert(arr, str:sub(i, i))
+    end
+  else
+    while findStart <= str:len() do
+      local s, e = str:find(delimiter, findStart)
+      if s and e then
+        table.insert(arr, str:sub(findStart, s - 1))
+        findStart = e + 1
+        if findStart == str:len() + 1 then
+          table.insert(arr, '')
+          break
+        end
+      else
+        table.insert(arr, str:sub(findStart, str:len()))
         break
       end
-    else
-      table.insert(arr, str:sub(findStart, str:len()))
-      break
     end
   end
 
   return arr
 end
 
+---@type fun(arr: table): string
+function stringJoin(arr)
+  local str = ''
+  for _, e in ipairs(arr) do
+    str = str .. e
+  end
+  return str
+end
+
 ---@type fun(tab: table, fn: function): table
 function map(tab, fn)
   local newTable = {}
   for k, v in pairs(tab) do
-    newTable[k] = fn(v)
+    newTable[k] = fn(v, k)
   end
   return newTable
 end
@@ -76,4 +91,18 @@ end
 -- It's like print, but cooler
 function dump(o)
   print(anythingToString(o, 0))
+end
+
+function printGrid(grid)
+  for _, row in ipairs(grid) do
+    print(stringJoin(row))
+  end
+end
+
+function deepClone(x)
+  if type(x) == 'table' then
+    return map(x, deepClone)
+  else
+    return x
+  end
 end

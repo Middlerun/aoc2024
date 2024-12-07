@@ -9,7 +9,7 @@ function parseInput()
     if line == '' then
       isParsingRules = false
     elseif isParsingRules then
-      local rule = map(stringSplit(line, '|'), tonumber)
+      local rule = map(stringSplit(line, '|'), function(n, _) return tonumber(n) end)
 
       if not rulesByFirstPage[rule[1]] then
         rulesByFirstPage[rule[1]] = {}
@@ -21,7 +21,7 @@ function parseInput()
       end
       table.insert(rulesBySecondPage[rule[2]], rule)
     else
-      local update = map(stringSplit(line, ','), tonumber)
+      local update = map(stringSplit(line, ','), function(n, _) return tonumber(n) end)
       table.insert(updates, update)
     end
   end
