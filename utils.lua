@@ -51,15 +51,6 @@ function stringSplit(str, delimiter)
   return arr
 end
 
----@type fun(arr: table): string
-function stringJoin(arr)
-  local str = ''
-  for _, e in ipairs(arr) do
-    str = str .. e
-  end
-  return str
-end
-
 ---@type fun(tab: table, fn: function): table
 function map(tab, fn)
   local newTable = {}
@@ -67,6 +58,14 @@ function map(tab, fn)
     newTable[k] = fn(v, k)
   end
   return newTable
+end
+
+---@type fun(arr: table, fn: function): any, number
+function findWhere(arr, fn)
+  for i, v in ipairs(arr) do
+    if fn(v) then return v, i end
+  end
+  return nil, -1
 end
 
 -- From https://stackoverflow.com/a/27028488
@@ -95,7 +94,7 @@ end
 
 function printGrid(grid)
   for _, row in ipairs(grid) do
-    print(stringJoin(row))
+    print(table.concat(row, ''))
   end
 end
 
