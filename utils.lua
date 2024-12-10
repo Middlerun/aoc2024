@@ -18,6 +18,24 @@ function setDefault(t, d)
   setmetatable(t, defaultValueMetatable)
 end
 
+function readGridInput(tileMapperFn)
+  local rows = {}
+
+  local y = 0
+  for line in readInput() do
+    y = y + 1
+    local row = stringSplit(line, '')
+
+    if tileMapperFn then
+      row = map(row, tileMapperFn)
+    end
+
+    table.insert(rows, row)
+  end
+
+  return rows
+end
+
 ---@type fun(str: string, delimiter: string): table
 function stringSplit(str, delimiter)
   local arr = {}
