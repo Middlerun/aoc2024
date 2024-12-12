@@ -1,6 +1,6 @@
 require('utils')
 
-function findReachableNines(rows, x, y, value, reachableNines)
+local function findReachableNines(rows, x, y, value, reachableNines)
   if rows[y] == nil or rows[y][x] ~= value then
     return
   end

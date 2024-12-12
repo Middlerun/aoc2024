@@ -1,6 +1,6 @@
 require('utils')
 
-function findDistinctTrails(rows, x, y, value)
+local function findDistinctTrails(rows, x, y, value)
   if rows[y] == nil or rows[y][x] ~= value then
     return 0
   end
