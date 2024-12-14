@@ -86,6 +86,20 @@ function findWhere(arr, fn)
   return nil, -1
 end
 
+---@type fun(arr: table, fn: function): any, number, number
+function minBy(arr, fn)
+  local min = {}
+  local minVal = math.huge
+  for i, v in ipairs(arr) do
+    local val = fn(v)
+    if val < minVal then
+      min = v
+      minVal = val
+    end
+  end
+  return min, minVal, i
+end
+
 -- From https://stackoverflow.com/a/27028488
 -- Modified by me
 local function anythingToString(o, level)
@@ -153,4 +167,12 @@ function spliceArray(sourceArr, startIndex, lengthToRemove, elementsToInsert)
   end
 
   return arr
+end
+
+function round(num)
+  local int, frac = math.modf(num)
+  if frac >= 0.5 then
+    return int + 1
+  end
+  return int
 end
