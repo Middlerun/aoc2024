@@ -90,14 +90,16 @@ end
 function minBy(arr, fn)
   local min = {}
   local minVal = math.huge
+  local minIndex
   for i, v in ipairs(arr) do
     local val = fn(v)
     if val < minVal then
       min = v
       minVal = val
+      minIndex = i
     end
   end
-  return min, minVal, i
+  return min, minVal, minIndex
 end
 
 -- From https://stackoverflow.com/a/27028488
@@ -124,9 +126,19 @@ function dump(o)
   print(anythingToString(o, 0))
 end
 
-function printGrid(grid)
-  for _, row in ipairs(grid) do
-    print(table.concat(row, ''))
+---@param grid string[][] An array of arrays of single characters
+---@param mapFn fun(value: string, x: number, y: number): string An optional function to map the characters. Called with the value and the x and y coordinates.
+---@overload fun(grid: string[][])
+function printGrid(grid, mapFn)
+  for y, row in ipairs(grid) do
+    local mappedRow = map(row, function(v, x)
+      if mapFn then
+        return mapFn(v, x, y)
+      else
+        return v
+      end
+    end)
+    print(table.concat(mappedRow, ''))
   end
 end
 
