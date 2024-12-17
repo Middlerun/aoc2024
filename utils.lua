@@ -150,12 +150,36 @@ function shallowClone(x)
   end
 end
 
+function shallowClone(x)
+  return map(x, function(v) return v end)
+end
+
 function deepClone(x)
   if type(x) == 'table' then
     return map(x, deepClone)
   else
     return x
   end
+end
+
+function pickKeys(o, keys)
+  local newObj = {}
+  for _, k in ipairs(keys) do
+    newObj[k] = o[k]
+  end
+  return newObj
+end
+
+---@generic T
+---@param t T[]
+---@param fn fun(item: T): boolean
+---@return integer
+function countWhere(t, fn)
+  local total = 0
+  for _, v in pairs(t) do
+    if fn(v) then total = total + 1 end
+  end
+  return total
 end
 
 ---@type fun(sourceArr: table, startIndex: number, lengthToRemove: number, elementsToInsert: table): table

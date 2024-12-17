@@ -76,15 +76,15 @@ local function findCheapestPath(rows, startDirection, startX, startY, endX, endY
     if x == endX and y == endY then
       return 0
     elseif x == endX then
-      if direction == LEFT then
-        turnsNeeded = 2
-      elseif direction == UP or direction == DOWN then
-        turnsNeeded = 1
-      end
-    elseif y == endY then
       if direction == DOWN then
         turnsNeeded = 2
       elseif direction == LEFT or direction == RIGHT then
+        turnsNeeded = 1
+      end
+    elseif y == endY then
+      if direction == LEFT then
+        turnsNeeded = 2
+      elseif direction == UP or direction == DOWN then
         turnsNeeded = 1
       end
     else

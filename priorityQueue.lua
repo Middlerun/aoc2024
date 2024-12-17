@@ -106,7 +106,7 @@ function PriorityQueue:print()
   local str = '#'
   local node = self.head
   while node do
-    str = str .. ' -> ' .. tostring(node.value)
+    str = str .. ' -> ' .. tostring(node.value) .. ':' .. node.priority
     node = node.next
   end
   print(str)
