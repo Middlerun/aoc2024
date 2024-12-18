@@ -212,3 +212,26 @@ function round(num)
   end
   return int
 end
+
+--- Convenience function, so the function can be used without having to worry about
+--- a second argument inadvertently being used as the base
+function toNumberBase10(n)
+  return tonumber(n)
+end
+
+function arraysEqual(a, b)
+  if #a ~= #b then return false end
+  for i, v in ipairs(a) do
+    if v ~= b[i] then return false end
+  end
+  return true
+end
+
+function arrayReverse(arr)
+  local newArr = {}
+  local len = #arr
+  for i = 1, #arr do
+    newArr[i] = arr[len - i + 1]
+  end
+  return newArr
+end
