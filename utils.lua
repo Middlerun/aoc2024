@@ -1,9 +1,12 @@
+function isTest()
+  return arg[1] == 'test' or arg[1] == 't'
+end
+
 function readInput()
-  local isTest = arg[1] == 'test' or arg[1] == 't'
   local dir = arg[0]:match("(.*[/\\])")
   local filename = dir .. 'input.txt'
 
-  if isTest then
+  if isTest() then
     filename = dir .. 'testinput.txt'
   end
 
@@ -76,6 +79,18 @@ function map(tab, fn)
     newTable[k] = fn(v, k)
   end
   return newTable
+end
+
+---@generic T
+---@type fun(arr: T[], fn: fun(v: T, k: any): boolean): T[]
+function filter(tab, fn)
+  local newArr = {}
+  for k, v in pairs(tab) do
+    if fn(v, k) then
+      table.insert(newArr, v)
+    end
+  end
+  return newArr
 end
 
 ---@type fun(arr: table, fn: function): any, number

@@ -1,7 +1,8 @@
-local isTest = arg[1] == 'test' or arg[1] == 't'
+require('utils')
+
 ROOM_WIDTH = 101
 ROOM_HEIGHT = 103
-if isTest then
+if isTest() then
   ROOM_WIDTH = 11
   ROOM_HEIGHT = 7
 end
