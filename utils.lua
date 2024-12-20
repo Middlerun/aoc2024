@@ -21,6 +21,8 @@ function setDefault(t, d)
   setmetatable(t, defaultValueMetatable)
 end
 
+---@param tileMapperFn fun(tile: string, x: number, y: number): string
+---@return string[][]
 function readGridInput(tileMapperFn)
   local rows = {}
 
@@ -30,7 +32,7 @@ function readGridInput(tileMapperFn)
     local row = stringSplit(line, '')
 
     if tileMapperFn then
-      row = map(row, tileMapperFn)
+      row = map(row, function(tile, x) return tileMapperFn(tile, x, y) end)
     end
 
     table.insert(rows, row)
@@ -72,7 +74,9 @@ function stringSplit(str, delimiter)
   return arr
 end
 
----@type fun(tab: table, fn: function): table
+---@generic T1
+---@generic T2
+---@type fun(tab: T1[], fn: fun(v: T1, k: any): T2): T2[]
 function map(tab, fn)
   local newTable = {}
   for k, v in pairs(tab) do
