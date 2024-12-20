@@ -7,10 +7,10 @@ local LEFT = 3
 local RIGHT = 4
 
 local MOVEMENT_DIRECTIONS = {
-  [UP] = { x = 0, y = -1 },
-  [DOWN] = { x = 0, y = 1 },
-  [RIGHT] = { x = 1, y = 0 },
-  [LEFT] = { x = -1, y = 0 },
+  [UP] = Vec2:new(0, -1),
+  [DOWN] = Vec2:new(0, 1),
+  [RIGHT] = Vec2:new(1, 0),
+  [LEFT] = Vec2:new(-1, 0),
 }
 
 local EMPTY = '.'
@@ -47,7 +47,7 @@ local trackPositions = { startPos }
 
 while currentPos ~= endPos do
   for _, direction in ipairs(MOVEMENT_DIRECTIONS) do
-    local pos = Vec2:new(currentPos.x + direction.x, currentPos.y + direction.y)
+    local pos = currentPos + direction
     if pos ~= prevPos and getTile(pos) == EMPTY then
       prevPos = currentPos
       currentPos = pos

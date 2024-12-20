@@ -7,21 +7,21 @@ local LEFT = 3
 local RIGHT = 4
 
 local MOVEMENT_DIRECTIONS = {
-  [UP] = { x = 0, y = -1 },
-  [DOWN] = { x = 0, y = 1 },
-  [RIGHT] = { x = 1, y = 0 },
-  [LEFT] = { x = -1, y = 0 },
+  [UP] = Vec2:new(0, -1),
+  [DOWN] = Vec2:new(0, 1),
+  [RIGHT] = Vec2:new(1, 0),
+  [LEFT] = Vec2:new(-1, 0),
 }
 
 local CHEAT_DIRECTIONS = {
-  { x = 0,  y = -2 },
-  { x = 1,  y = -1 },
-  { x = 2,  y = 0 },
-  { x = 1,  y = 1 },
-  { x = 0,  y = 2 },
-  { x = -1, y = 1 },
-  { x = -2, y = 0 },
-  { x = -1, y = -1 },
+  Vec2:new(0,  -2),
+  Vec2:new(1,  -1),
+  Vec2:new(2,  0),
+  Vec2:new(1,  1),
+  Vec2:new(0,  2),
+  Vec2:new(-1, 1),
+  Vec2:new(-2, 0),
+  Vec2:new(-1, -1),
 }
 
 local EMPTY = '.'
@@ -58,7 +58,7 @@ local trackPositions = { startPos }
 
 while currentPos ~= endPos do
   for _, direction in ipairs(MOVEMENT_DIRECTIONS) do
-    local pos = Vec2:new(currentPos.x + direction.x, currentPos.y + direction.y)
+    local pos = currentPos + direction
     if pos ~= prevPos and getTile(pos) == EMPTY then
       prevPos = currentPos
       currentPos = pos
@@ -84,7 +84,7 @@ local totalCheatsThatSaveAtLeast100Picoseconds = 0
 for i, pos in ipairs(trackPositions) do
   local currentDistance = i - 1
   for _, direction in ipairs(CHEAT_DIRECTIONS) do
-    local cheatPos = Vec2:new(pos.x + direction.x, pos.y + direction.y)
+    local cheatPos = pos + direction
     local cheatPosDistance = distanceMap[tostring(cheatPos)]
     if cheatPosDistance then
       local timeSaved = cheatPosDistance - (currentDistance + 2)
