@@ -2,6 +2,7 @@ function isTest()
   return arg[1] == 'test' or arg[1] == 't'
 end
 
+---@return fun(): string | nil
 function readInput()
   local dir = arg[0]:match("(.*[/\\])")
   local filename = dir .. 'input.txt'
@@ -253,4 +254,11 @@ function arrayReverse(arr)
     newArr[i] = arr[len - i + 1]
   end
   return newArr
+end
+
+function tableInsertMany(arr1, arr2)
+  local arr1Len = #arr1
+  for i = 1, #arr2 do
+    arr1[arr1Len + i] = arr2[i]
+  end
 end
