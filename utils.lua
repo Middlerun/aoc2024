@@ -262,3 +262,24 @@ function tableInsertMany(arr1, arr2)
     arr1[arr1Len + i] = arr2[i]
   end
 end
+
+---@param arr any[]
+---@param target any
+---@return boolean
+function arrayIncludes(arr, target)
+  for _, v in ipairs(arr) do
+    if v == target then return true end
+  end
+  return false
+end
+
+---@generic T
+---@param arr T[]
+---@param conditionFn fun(val: T, index: number): boolean
+---@return boolean
+function every(arr, conditionFn)
+  for i, v in ipairs(arr) do
+    if not conditionFn(v, i) then return false end
+  end
+  return true
+end
