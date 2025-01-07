@@ -17,9 +17,9 @@ for day = 1, 25 do
     paddedDay = '0' .. day
   end
   if (exists('./' .. paddedDay .. '/')) then
-    print('Day ' .. day .. ' part A:')
+    print('Day ' .. day .. ' part 1:')
     os.execute('lua ./' .. paddedDay .. '/a.lua')
-    print('Day ' .. day .. ' part B:')
+    print('Day ' .. day .. ' part 2:')
     os.execute('lua ./' .. paddedDay .. '/b.lua')
   end
 end

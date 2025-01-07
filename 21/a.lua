@@ -56,68 +56,121 @@ end
 ---@param fromKey string
 ---@param toKey string
 ---@return Action[]
-local function numericKeyActions(fromKey, toKey)
-  local actions = {}
-  local from = numericKeyPositions[fromKey]
-  local to = numericKeyPositions[toKey]
-
-  if from.y == 4 and to.x == 1 then
-    insertVerticals(actions, from, to)
-    insertHorizontals(actions, from, to)
-  else
-    insertHorizontals(actions, from, to)
-    insertVerticals(actions, from, to)
+local function arrowKeyActions(fromKey, toKey, layer)
+  if layer == 0 then
+    return { toKey }
   end
 
-  table.insert(actions, 'A')
+  local possibleSequences = {}
+  local from = arrowKeyPositions[fromKey]
+  local to = arrowKeyPositions[toKey]
 
-  return actions
+  if from.y == 1 and to.x == 1 then
+    local actions = {}
+    insertVerticals(actions, from, to)
+    insertHorizontals(actions, from, to)
+    table.insert(actions, 'A')
+    table.insert(possibleSequences, actions)
+  elseif from.x == 1 and to.y == 1 then
+    local actions = {}
+    insertHorizontals(actions, from, to)
+    insertVerticals(actions, from, to)
+    table.insert(actions, 'A')
+    table.insert(possibleSequences, actions)
+  else
+    -- try both
+    local actionsHorizontalFirst = {}
+    insertHorizontals(actionsHorizontalFirst, from, to)
+    insertVerticals(actionsHorizontalFirst, from, to)
+    table.insert(actionsHorizontalFirst, 'A')
+    table.insert(possibleSequences, actionsHorizontalFirst)
+
+    local actionsVerticalFirst = {}
+    insertVerticals(actionsVerticalFirst, from, to)
+    insertHorizontals(actionsVerticalFirst, from, to)
+    table.insert(actionsVerticalFirst, 'A')
+    table.insert(possibleSequences, actionsVerticalFirst)
+  end
+
+  local expandedSequences = map(
+    possibleSequences,
+    function (seq)
+      local prev = 'A'
+      local input = {}
+
+      for _, key in ipairs(seq) do
+        tableInsertMany(
+          input,
+          arrowKeyActions(prev, key, layer - 1)
+        )
+        prev = key
+      end
+
+      return input
+    end
+  )
+
+  local shortest = minBy(expandedSequences, function (seq) return #seq end)
+
+  return shortest
 end
 
 ---@param fromKey string
 ---@param toKey string
 ---@return Action[]
-local function arrowKeyActions(fromKey, toKey)
-  local actions = {}
-  local from = arrowKeyPositions[fromKey]
-  local to = arrowKeyPositions[toKey]
+local function numericKeyActions(fromKey, toKey)
+  local possibleSequences = {}
+  local from = numericKeyPositions[fromKey]
+  local to = numericKeyPositions[toKey]
 
-  if from.y == 1 and to.x == 1 then
+  if from.y == 4 and to.x == 1 then
+    local actions = {}
     insertVerticals(actions, from, to)
     insertHorizontals(actions, from, to)
-  else
+    table.insert(actions, 'A')
+    table.insert(possibleSequences, actions)
+  elseif from.x == 1 and to.y == 4 then
+    local actions = {}
     insertHorizontals(actions, from, to)
     insertVerticals(actions, from, to)
-  end
-
-  table.insert(actions, 'A')
-
-  return actions
-end
-
----@param sequence string[]
----@param type 'numeric' | 'arrow'
----@return string[]
-local function generateNextSequence(sequence, type)
-  ---@type fun(fromKey: string, toKey: string): Action[]
-  local keyActions
-  if type == 'numeric' then
-    keyActions = numericKeyActions
+    table.insert(actions, 'A')
+    table.insert(possibleSequences, actions)
   else
-    keyActions = arrowKeyActions
+    -- try both
+    local actionsHorizontalFirst = {}
+    insertHorizontals(actionsHorizontalFirst, from, to)
+    insertVerticals(actionsHorizontalFirst, from, to)
+    table.insert(actionsHorizontalFirst, 'A')
+    table.insert(possibleSequences, actionsHorizontalFirst)
+
+    local actionsVerticalFirst = {}
+    insertVerticals(actionsVerticalFirst, from, to)
+    insertHorizontals(actionsVerticalFirst, from, to)
+    table.insert(actionsVerticalFirst, 'A')
+    table.insert(possibleSequences, actionsVerticalFirst)
   end
 
-  -- Assumption: When this function is called, the current presser's finger is always on the A key
-  local currentKey = 'A'
-  ---@type string[]
-  local newSequence = {}
+  local expandedSequences = map(
+    possibleSequences,
+    function (seq)
+      local prev = 'A'
+      local input = {}
 
-  for _, nextKey in ipairs(sequence) do
-    tableInsertMany(newSequence, keyActions(currentKey, nextKey))
-    currentKey = nextKey
-  end
+      for _, key in ipairs(seq) do
+        tableInsertMany(
+          input,
+          arrowKeyActions(prev, key, 2)
+        )
+        prev = key
+      end
 
-  return newSequence
+      return input
+    end
+  )
+
+  local shortest = minBy(expandedSequences, function (seq) return #seq end)
+
+  return shortest
 end
 
 local total = 0
@@ -125,25 +178,22 @@ local total = 0
 for line in readInput() do
   local numericKeys = stringSplit(line, '')
 
-  local arrowKeys1 = generateNextSequence(numericKeys, 'numeric')
+  local prev = 'A'
+  local humanInput = {}
 
-  local arrowKeys2 = generateNextSequence(arrowKeys1, 'arrow')
-
-  local arrowKeys3 = generateNextSequence(arrowKeys2, 'arrow')
+  for _, key in ipairs(numericKeys) do
+    tableInsertMany(
+      humanInput,
+      numericKeyActions(prev, key)
+    )
+    prev = key
+  end
 
   local numericCode = tonumber(line:sub(1, -2))
-  -- print(#arrowKeys3)
-  local complexity = numericCode * #arrowKeys3
+
+  local complexity = numericCode * #humanInput
   total = total + complexity
 
-  -- if numericCode ~= 3379 then
-    -- print(table.concat(numericKeys, ''))
-    -- print(table.concat(arrowKeys1, ''))
-    -- print(table.concat(arrowKeys2, ''))
-    -- print(table.concat(arrowKeys3, ''))
-  -- end
 end
 
 print(total)
-
--- This gets the right result for the test input, but not for the real one. No idea why.
