@@ -283,3 +283,16 @@ function every(arr, conditionFn)
   end
   return true
 end
+
+---@param n number
+---@param digits number
+---@return string
+function zeroPad(n, digits)
+  local str = '' .. n
+  local zeroesToAdd = math.max(0, digits - str:len())
+  return ('0'):rep(zeroesToAdd) .. str
+end
+
+function xor(a, b)
+  return (a and not b) or (b and not a)
+end

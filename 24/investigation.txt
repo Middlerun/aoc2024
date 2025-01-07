@@ -1,0 +1,29 @@
+y07 XOR x07 -> krv
+x07 AND y07 -> jss
+btq AND krv -> stq
+krv XOR btq -> nqk
+stq OR jss -> z07
+nqk and z07 are swapped
+
+x17 XOR y17 -> pcp
+y17 AND x17 -> fgt
+fgt AND nmq -> vtv
+vtv OR pcp -> fcg
+nmq XOR fgt -> z17
+pcp and fgt are swapped
+
+y24 XOR x24 -> mqq
+x24 AND y24 -> z24
+nmp AND mqq -> rgc
+rgc OR fpq -> tgs
+nmp XOR mqq -> fpq
+z24 and fpq are swapped
+
+x32 XOR y32 -> qcs
+x32 AND y32 -> fqc
+fth AND qcs -> z32
+srn OR fqc -> pcs
+fth XOR qcs -> srn
+z32 and srn are swapped
+
+fgt,fpq,nqk,pcp,srn,z07,z24,z32
