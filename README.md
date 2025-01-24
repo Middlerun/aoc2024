@@ -2,4 +2,4 @@
 
 Language: Lua
 
-I don't know Lua very well, so I'm doing this to learn.
+I don't know Lua very well, so I did this to learn.
